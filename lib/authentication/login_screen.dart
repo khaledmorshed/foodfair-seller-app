@@ -27,7 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
               hintText: "Email",
               isObsecure: false,
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             CustomTextFormField(

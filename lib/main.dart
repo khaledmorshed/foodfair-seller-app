@@ -1,7 +1,12 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import '../splashScreen/splash_screen.dart';
 
-void main() {
+Future<void> main() async {
+  //what is for dont know. have to know
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+   //await FirebaseStorage.instance.useStorageEmulator('localhost', 9199);
   runApp(const MyApp());
 }
 

@@ -8,7 +8,10 @@ class CustomTextFormField extends StatelessWidget {
   final TextInputType? textInputType;
   bool? isObsecure;
   bool? enable;
-
+  String? validatorValue;
+  List<String>? validatorValueList = [];
+  //final Validator validator;
+  
   CustomTextFormField({
     this.controller,
     this.iconData,
@@ -16,6 +19,7 @@ class CustomTextFormField extends StatelessWidget {
     this.textInputType,
     this.isObsecure,
     this.enable,
+    this.validatorValue,
   });
 
   @override
@@ -23,12 +27,24 @@ class CustomTextFormField extends StatelessWidget {
     return Container(
       //margin: EdgeInsets.all(10),
       //padding: EdgeInsets.all(10),
-      height: 42,
+      //height: 42,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(10),
       ),
       child: TextFormField(
+        validator: (validatorValue) {
+          //int phone = int.parse(validatorValue!);
+          print(
+              "KLDJFLKDJFLDKJFLKDJDFLDKJJJJJJJJJJJJJJFAOSFIDOJFF : $validatorValue");
+          if (validatorValue!.length < 5) {
+            //return "phone number should be 11 digits";
+          }
+          if (validatorValue.contains('@')) {
+          } else {
+            return "does not @ sing";
+          }
+        },
         keyboardType: textInputType,
         controller: controller,
         enabled: enable,
