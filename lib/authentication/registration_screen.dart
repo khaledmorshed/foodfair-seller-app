@@ -1,13 +1,14 @@
-import 'dart:convert';
+import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:foodfair_seller_app/exceptions/loading_dialog.dart';
 import 'package:foodfair_seller_app/presentation/color_manager.dart';
 import 'package:foodfair_seller_app/sellerHomeScreen/seller_home_screen.dart';
 import 'package:geocoding/geocoding.dart';
-import 'dart:io';
 import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../exceptions/error_dialog.dart';
+import '../global/global_instance_or_variable.dart';
 import '../widgets/container_decoration.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -39,9 +40,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   final ImagePicker _imagePicker = ImagePicker();
   String? completeAddress;
   var imagePath;
-  var sellerImageUrl;
+  String? sellerImageUrl;
 
-  bool? isLoading;
+  bool isLoading = false;
 
   Position? position;
   List<Placemark>? placeMarks;
@@ -102,9 +103,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     }
     //TaskSnapshot snapshot = await uploadTask!;
     TaskSnapshot snapshot = await uploadTask!.whenComplete(() {});
-    //return sellerImageUrl = await snapshot.ref.getDownloadURL();
+    //sellerImageUrl = await snapshot.ref.getDownloadURL();
     await snapshot.ref.getDownloadURL().then((url) {
       //sellerImageUrl = url;
+      sellerImageUrl = url;
       authenticateSellerAndSignUp();
     });
     //return sellerImageUrl;
@@ -115,7 +117,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       return showDialog(
           context: context,
           builder: (context) {
-            return ErroDailog(
+            return ErrorDialog(
               message: "Please upload an image",
             );
           });
@@ -125,7 +127,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     if (!isValid) {
       return;
     }
-    _formKey.currentState!.save();
+    //_formKey.currentState!.save();
 
     setState(() {
       isLoading = true;
@@ -136,7 +138,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
   Future authenticateSellerAndSignUp() async {
     //User? currentSeller;
-    final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+    //final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 
     // try {
     //   // UserCredential userCredential =
@@ -173,9 +175,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
     //it is ok
     try {
-      UserCredential userCredential = await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(
-              email: emailController.text, password: passwordController.text);
+      //firebaseAuth = thiis variable from global_instance_or_variable file
+      UserCredential userCredential =
+          await firebaseAuth.createUserWithEmailAndPassword(
+        email: emailController.text.trim(),
+        password: passwordController.text.trim(),
+      );
       if (userCredential.user != null) {
         saveDataToFireStore(userCredential.user!).then((value) {
           //Navigator.pop(context);
@@ -200,17 +205,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     }
 
     //if this is added then again Registration from will show which was not necessary
-    setState(() {
-      isLoading = false;
-    });
+    // setState(() {
+    //   isLoading = false;
+    // });
   }
 
   Future saveDataToFireStore(User currentSeller) async {
     //doc(current.uid) =all the seller information with the unique id.
     //uid will come from firebase auth(uid = User UID == check there in firebase auth)
-    // setState(() {
-    //   extraCheck = 1;
-    // });
     FirebaseFirestore.instance
         .collection("sellers")
         .doc(currentSeller.uid)
@@ -227,7 +229,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       "latitude": position!.latitude,
       "longitude": position!.longitude,
     });
-    //save data locally later
+    //save data locally with sharedPrefernces
+    sPref = await SharedPreferences.getInstance();
+    await sPref!.setString("uid", currentSeller.uid);
+    await sPref!.setString("email", currentSeller.email.toString());
+    await sPref!.setString("name", nameController.text.trim());
+    await sPref!.setString("photoUrl", sellerImageUrl!);
   }
 
   getCurrentLocation() async {
@@ -379,6 +386,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                 if (value!.isEmpty) {
                                   return "Please enter a name";
                                 }
+                                return null;
                               },
                             ),
                             const SizedBox(
@@ -437,8 +445,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               validator: (value) {
                                 if (value!.isEmpty) {
                                   return "please enter password";
-                                } else if (value.length < 3) {
-                                  return "password must be greater than 2";
+                                } else if (value.length < 6) {
+                                  return "password must be at least 6 characters";
                                 }
                                 return null;
                               },
@@ -469,6 +477,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                 if (value != passwordController.text) {
                                   return "passwords do not match";
                                 }
+                                return null;
                               },
                             ),
                             const SizedBox(

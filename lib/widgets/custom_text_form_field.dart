@@ -35,8 +35,6 @@ class CustomTextFormField extends StatelessWidget {
       child: TextFormField(
         validator: (validatorValue) {
           //int phone = int.parse(validatorValue!);
-          print(
-              "KLDJFLKDJFLDKJFLKDJDFLDKJJJJJJJJJJJJJJFAOSFIDOJFF : $validatorValue");
           if (validatorValue!.length < 5) {
             //return "phone number should be 11 digits";
           }

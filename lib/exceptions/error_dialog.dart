@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:foodfair_seller_app/exceptions/progress_bar.dart';
 
-class ErroDailog extends StatelessWidget {
+class ErrorDialog extends StatelessWidget {
   final String? message;
-  ErroDailog({this.message});
+  ErrorDialog({this.message});
 
   @override
   Widget build(BuildContext context) {
