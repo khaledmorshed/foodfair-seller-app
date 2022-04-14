@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:foodfair_seller_app/global/global_instance_or_variable.dart';
-import 'package:foodfair_seller_app/sellerHomeScreen/seller_home_screen.dart';
+import 'package:foodfair_seller_app/screens/seller_home_screen.dart';
 
-import '../authentication/auth_screen.dart';
+import 'auth_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);

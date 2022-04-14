@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:foodfair_seller_app/exceptions/loading_dialog.dart';
 import 'package:foodfair_seller_app/presentation/color_manager.dart';
-import 'package:foodfair_seller_app/sellerHomeScreen/seller_home_screen.dart';
+import 'package:foodfair_seller_app/screens/seller_home_screen.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -127,7 +127,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     if (!isValid) {
       return;
     }
-    //_formKey.currentState!.save();
+    _formKey.currentState!.save();
 
     setState(() {
       isLoading = true;
@@ -535,7 +535,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                 //     child: Icon(Icons.location_on),
                                 //   ),
                                 // ),
-                                hintText: "Cafe/Restaurant Address",
+                                hintText: "Restaurant Address",
                                 border: OutlineInputBorder(
                                   borderSide: BorderSide.none,
                                   borderRadius:

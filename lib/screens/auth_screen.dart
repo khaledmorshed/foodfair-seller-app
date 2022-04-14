@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:foodfair_seller_app/exceptions/loading_dialog.dart';
 import 'package:foodfair_seller_app/global/global_instance_or_variable.dart';
 import 'package:foodfair_seller_app/presentation/color_manager.dart';
-import 'package:foodfair_seller_app/sellerHomeScreen/seller_home_screen.dart';
+import 'package:foodfair_seller_app/screens/seller_home_screen.dart';
 import 'package:foodfair_seller_app/widgets/container_decoration.dart';
 import '../widgets/custom_button.dart';
 import 'registration_screen.dart';
@@ -36,7 +36,7 @@ class _AuthScreenState extends State<AuthScreen> {
       context: context,
       builder: (context) {
         return LoadingDailog(
-          message: "Authentication Checkin.",
+          message: "Authentication Checking.",
         );
       },
     );
@@ -61,12 +61,7 @@ class _AuthScreenState extends State<AuthScreen> {
     });
 
     if (currentSeller != null) {
-      readDataAndSaveDataLocally(currentSeller!).then((value) {
-        //for exiting loading dialog
-        Navigator.pop(context);
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const SellerHomeScreen()));
-      });
+      readDataAndSaveDataLocally(currentSeller!);
     }
   }
 
@@ -77,12 +72,29 @@ class _AuthScreenState extends State<AuthScreen> {
         .doc(currentSeller.uid)
         .get()
         .then((snapShot) async {
-      //currentSeller.uid = this come from Authentication
-      await sPref!.setString("uid", currentSeller.uid);
-      //snapshot.data()![""] = all comes from FireStore Database
-      await sPref!.setString("email", snapShot.data()!["sellerEmail"]);
-      await sPref!.setString("name", snapShot.data()!["sellerName"]);
-      await sPref!.setString("photoUrl", snapShot.data()!["sellerAvatarUrl"]);
+      if (snapShot.data() != null) {
+        //currentSeller.uid = this come from Authentication
+        await sPref!.setString("uid", currentSeller.uid);
+        //snapshot.data()![""] = all comes from FireStore Database
+        await sPref!.setString("email", snapShot.data()!["sellerEmail"]);
+        await sPref!.setString("name", snapShot.data()!["sellerName"]);
+        await sPref!.setString("photoUrl", snapShot.data()!["sellerAvatarUrl"]);
+
+        Navigator.pop(context);
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const SellerHomeScreen()));
+      } else {
+        firebaseAuth.signOut();
+        Navigator.pop(context);
+        showDialog(
+            context: context,
+            builder: (context) {
+              return ErrorDialog(
+                message:
+                    "There is no user record corresponding to this identifier. The user may have been deleted.",
+              );
+            });
+      }
     });
   }
 
@@ -120,6 +132,7 @@ class _AuthScreenState extends State<AuthScreen> {
                         children: [
                           TextFormField(
                             controller: emailController,
+                            keyboardType: TextInputType.emailAddress,
                             decoration: const InputDecoration(
                               contentPadding: EdgeInsets.symmetric(
                                   horizontal: 2, vertical: 2),
@@ -129,7 +142,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                   ),
                                   borderSide: BorderSide.none),
                               prefixIcon: Icon(
-                                Icons.person,
+                                Icons.email,
                                 color: Colors.cyan,
                               ),
                               filled: true,
@@ -139,8 +152,7 @@ class _AuthScreenState extends State<AuthScreen> {
                             validator: (value) {
                               if (value!.isEmpty) {
                                 return "Please enter an email";
-                              } 
-                              else if (!value.contains('@')) {
+                              } else if (!value.contains('@')) {
                                 return "Invalid email";
                               }
                               return null;
@@ -151,6 +163,7 @@ class _AuthScreenState extends State<AuthScreen> {
                           ),
                           TextFormField(
                             controller: passwordController,
+                            obscureText: true,
                             decoration: const InputDecoration(
                               contentPadding: EdgeInsets.symmetric(
                                   horizontal: 2, vertical: 2),
@@ -160,7 +173,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                   ),
                                   borderSide: BorderSide.none),
                               prefixIcon: Icon(
-                                Icons.person,
+                                Icons.lock,
                                 color: Colors.cyan,
                               ),
                               filled: true,
