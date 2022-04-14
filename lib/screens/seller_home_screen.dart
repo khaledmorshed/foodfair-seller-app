@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:foodfair_seller_app/global/global_instance_or_variable.dart';
 import 'package:foodfair_seller_app/screens/add_item_screen.dart';
 import 'package:foodfair_seller_app/widgets/my_drawer.dart';
+import 'package:foodfair_seller_app/widgets/text_widget_header.dart';
 import '../exceptions/error_dialog.dart';
 import '../models/items.dart';
 import '../widgets/container_decoration.dart';
@@ -109,14 +110,19 @@ class _SellerHomeScreenState extends State<SellerHomeScreen> {
                     ),
                   ),
                 ),*/
-          SliverToBoxAdapter(
-            child: Text("Items"),
+
+          SliverPersistentHeader(
+            pinned: true,
+            delegate: TextWidgetHeader(allItem: "My Items"),
           ),
           StreamBuilder(
             // stream: getDataFromFirebase()!.snapshots(),
             // stream: FirebaseFirestore.instance.collection("sellers").snapshots(),
-            stream:
-                FirebaseFirestore.instance.collection("sellers").doc(sPref!.getString("uid")).collection("items").snapshots(),
+            stream: FirebaseFirestore.instance
+                .collection("sellers")
+                .doc(sPref!.getString("uid"))
+                .collection("items")
+                .snapshots(),
             builder: (context, AsyncSnapshot<QuerySnapshot?> snapshot) {
               if (snapshot.hasError) {
                 ErrorDialog(
