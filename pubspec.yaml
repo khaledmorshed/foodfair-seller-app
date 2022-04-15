@@ -43,6 +43,7 @@ dependencies:
   geolocator:
   geocoding:
   fluttertoast:
+  shared_preferences:
 
 
 dev_dependencies:

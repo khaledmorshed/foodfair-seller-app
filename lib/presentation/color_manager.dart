@@ -9,9 +9,9 @@ class ColorManager {
   // static Color primaryOpacity70 = HexColor.fromHex("#B3ED9728");
 
   static Color red1 = Color.fromARGB(255, 142, 56, 70);
-  static Color red2 = Color(0xfff06292);
-  static Color red3 = Color(0xffec407a);
-  static Color red4 = Color(0xfff48fb1);
+  static Color red3 = Color(0xfff06292);
+  static Color red4 = Color(0xffec407a);
+  static Color red2 = Color(0xfff48fb1);
   static Color red5 = Color(0xfff44336);
 
   static Color depOrange1 = Color(0xfffbe9e7);
@@ -73,7 +73,8 @@ class ColorManager {
   static Color grey2 = Color(0xff616161);
   static Color grey3 = Color(0xff303030);
 
-
+  static Color whiteOnly = Color(0xffffffff);
+  static Color blackOnly = Color(0x00000000);
 
 }
 

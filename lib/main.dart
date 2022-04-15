@@ -1,12 +1,15 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import '../splashScreen/splash_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'global/global_instance_or_variable.dart';
+import 'screens/splash_screen.dart';
 
 Future<void> main() async {
   //what is for dont know. have to know
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-   //await FirebaseStorage.instance.useStorageEmulator('localhost', 9199);
+  //though I made sPref as global why here is needed. dont know
+  sPref = await SharedPreferences.getInstance();
   runApp(const MyApp());
 }
 

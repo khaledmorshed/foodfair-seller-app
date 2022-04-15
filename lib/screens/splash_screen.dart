@@ -1,8 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:foodfair_seller_app/global/global_instance_or_variable.dart';
+import 'package:foodfair_seller_app/screens/seller_menus_screen.dart';
 
-import '../authentication/auth_screen.dart';
+import 'auth_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -13,9 +15,16 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   startTimer() {
-    Timer(Duration(seconds: 1), () async {
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => AuthScreen()));
+    Timer(const Duration(seconds: 1), () async {
+      //in if now current user is registered and it is save lacallly with sharedPreferences
+      if(firebaseAuth.currentUser != null){
+        Navigator.push(
+          context, MaterialPageRoute(builder: (context) => const SellerMenusScreen()));
+      }else{
+           Navigator.push(
+          context, MaterialPageRoute(builder: (context) => const AuthScreen()));
+      }
+   
     });
   }
 
