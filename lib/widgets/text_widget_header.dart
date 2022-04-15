@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:foodfair_seller_app/widgets/container_decoration.dart';
 
 class TextWidgetHeader extends SliverPersistentHeaderDelegate {
-  String? allItem;
-  TextWidgetHeader({this.allItem});
+  String? title;
+  TextWidgetHeader({this.title});
   @override
   Widget build(
     BuildContext context,
@@ -20,7 +20,7 @@ class TextWidgetHeader extends SliverPersistentHeaderDelegate {
         decoration: ContainerDecoration().decoaration(),
         child: InkWell(
           child: Text(
-            allItem!,
+            title!,
             maxLines: 2,
           ),
         ),

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:foodfair_seller_app/exceptions/loading_dialog.dart';
 import 'package:foodfair_seller_app/global/global_instance_or_variable.dart';
 import 'package:foodfair_seller_app/presentation/color_manager.dart';
-import 'package:foodfair_seller_app/screens/seller_home_screen.dart';
+import 'package:foodfair_seller_app/screens/seller_menus_screen.dart';
 import 'package:foodfair_seller_app/widgets/container_decoration.dart';
 import '../widgets/custom_button.dart';
 import 'registration_screen.dart';
@@ -82,7 +82,7 @@ class _AuthScreenState extends State<AuthScreen> {
 
         Navigator.pop(context);
         Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const SellerHomeScreen()));
+            MaterialPageRoute(builder: (context) => const SellerMenusScreen()));
       } else {
         firebaseAuth.signOut();
         Navigator.pop(context);

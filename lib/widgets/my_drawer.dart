@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../global/global_instance_or_variable.dart';
 import '../presentation/color_manager.dart';
 import '../screens/auth_screen.dart';
-import '../screens/seller_home_screen.dart';
+import '../screens/seller_menus_screen.dart';
 
 class MyDrawer extends StatelessWidget {
   //const MyDrawer({Key? key}) : super(key: key);
@@ -63,7 +63,7 @@ class MyDrawer extends StatelessWidget {
             ),
             onTap: () {
               Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const SellerHomeScreen()));
+                MaterialPageRoute(builder: (context) => const SellerMenusScreen()));
             },
           ),
           const Divider(thickness: 1),

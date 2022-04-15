@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:foodfair_seller_app/global/global_instance_or_variable.dart';
-import 'package:foodfair_seller_app/screens/seller_home_screen.dart';
+import 'package:foodfair_seller_app/screens/seller_menus_screen.dart';
 
 import 'auth_screen.dart';
 
@@ -19,7 +19,7 @@ class _SplashScreenState extends State<SplashScreen> {
       //in if now current user is registered and it is save lacallly with sharedPreferences
       if(firebaseAuth.currentUser != null){
         Navigator.push(
-          context, MaterialPageRoute(builder: (context) => const SellerHomeScreen()));
+          context, MaterialPageRoute(builder: (context) => const SellerMenusScreen()));
       }else{
            Navigator.push(
           context, MaterialPageRoute(builder: (context) => const AuthScreen()));

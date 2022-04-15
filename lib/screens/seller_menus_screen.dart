@@ -1,23 +1,23 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:foodfair_seller_app/global/global_instance_or_variable.dart';
-import 'package:foodfair_seller_app/screens/add_item_screen.dart';
+import 'package:foodfair_seller_app/screens/add_menus_screen.dart';
 import 'package:foodfair_seller_app/widgets/my_drawer.dart';
 import 'package:foodfair_seller_app/widgets/text_widget_header.dart';
 import '../exceptions/error_dialog.dart';
-import '../models/items.dart';
+import '../models/menus.dart';
 import '../widgets/container_decoration.dart';
-import '../widgets/item_widget.dart';
+import '../widgets/menus_widget.dart';
 import '../widgets/loading_container.dart';
 
-class SellerHomeScreen extends StatefulWidget {
-  const SellerHomeScreen({Key? key}) : super(key: key);
+class SellerMenusScreen extends StatefulWidget {
+  const SellerMenusScreen({Key? key}) : super(key: key);
 
   @override
-  State<SellerHomeScreen> createState() => _SellerHomeScreenState();
+  State<SellerMenusScreen> createState() => _SellerMenusScreenState();
 }
 
-class _SellerHomeScreenState extends State<SellerHomeScreen> {
+class _SellerMenusScreenState extends State<SellerMenusScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,7 +32,7 @@ class _SellerHomeScreenState extends State<SellerHomeScreen> {
           IconButton(
             onPressed: () {
               Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => AddItemScreen()));
+                  MaterialPageRoute(builder: (context) => AddMenusScreen()));
             },
             icon: const Icon(Icons.post_add),
           ),
@@ -113,17 +113,20 @@ class _SellerHomeScreenState extends State<SellerHomeScreen> {
 
           SliverPersistentHeader(
             pinned: true,
-            delegate: TextWidgetHeader(allItem: "My Items"),
+            delegate: TextWidgetHeader(title: "My Menus"),
           ),
           StreamBuilder(
-            // stream: getDataFromFirebase()!.snapshots(),
-            // stream: FirebaseFirestore.instance.collection("sellers").snapshots(),
             stream: FirebaseFirestore.instance
                 .collection("sellers")
                 .doc(sPref!.getString("uid"))
-                .collection("items")
+                .collection("menus")
+                .orderBy("publishedDate", descending: true)
                 .snapshots(),
             builder: (context, AsyncSnapshot<QuerySnapshot?> snapshot) {
+              //print("m = ${snapshot[""]} + KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK");
+              // snapshot.forEach((movieObject) {
+              //  print(movieObject);
+              // }).toList();
               if (snapshot.hasError) {
                 ErrorDialog(
                   message: "${snapshot.error}",
@@ -143,11 +146,15 @@ class _SellerHomeScreenState extends State<SellerHomeScreen> {
                   : SliverList(
                       delegate: SliverChildBuilderDelegate(
                         (BuildContext context, int index) {
-                          Items itemModel = Items.fromJson(
+                          Menus menuModel = Menus.fromJson(
                               snapshot.data!.docs[index].data()
                                   as Map<String, dynamic>);
-                          return ItemsWidget(
-                            itemModel: itemModel,
+                          print(
+                              "MenuId sellerHome = ${menuModel.menuID} + HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
+                          print(
+                              "image sellerHome = ${menuModel.menuID} + HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
+                          return MenusWidget(
+                            model: menuModel,
                             context: context,
                             //netValue: model.isOnline,
                           );
